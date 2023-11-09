@@ -18,7 +18,7 @@ class DataSettings(BaseModel):
 
 
 class LLMSettings(BaseModel):
-    mode: str = Field(enum=["local", "open_ai", "sagemaker", "mock"])
+    mode: str = Field(enum=["local", "open_ai", "sagemaker", "mock", "ollama"])
 
 
 class LocalSettings(BaseModel):
@@ -41,6 +41,11 @@ class UISettings(BaseModel):
     path: str
 
 
+class OllamaSettings(BaseModel):
+    model: str
+    embedding_model_name: str
+
+
 class Settings(BaseModel):
     server: ServerSettings
     data: DataSettings
@@ -49,6 +54,7 @@ class Settings(BaseModel):
     local: LocalSettings
     sagemaker: SagemakerSettings
     openai: OpenAISettings
+    ollama: OllamaSettings
 
 
 settings = Settings(**load_active_profiles())

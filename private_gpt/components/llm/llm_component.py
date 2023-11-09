@@ -31,7 +31,17 @@ class LLMComponent:
                     completion_to_prompt=completion_to_prompt,
                     verbose=True,
                 )
+            case "ollama":
+                from llama_index.llms import Ollama
 
+                self.llm = Ollama(
+                    model=settings.ollama.model,
+                    temperature=0.1,
+                    additional_kwargs={},
+                    context_window=3900,
+                    messages_to_prompt=messages_to_prompt,
+                    completion_to_prompt=completion_to_prompt,
+                )
             case "sagemaker":
                 from private_gpt.components.llm.custom.sagemaker import SagemakerLLM
 

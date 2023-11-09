@@ -17,6 +17,10 @@ local:
   llm_hf_model_file: mistral-7b-instruct-v0.1.Q4_K_M.gguf
   embedding_hf_model_name: BAAI/bge-small-en-v1.5
 
+ollama:
+  model: llama2
+  embedding_model_name: llama2
+
 sagemaker:
   llm_endpoint_name: huggingface-pytorch-tgi-inference-2023-09-25-19-53-32-140
   embedding_endpoint_name: huggingface-pytorch-inference-2023-11-03-07-41-36-479
