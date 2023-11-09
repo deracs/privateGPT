@@ -1,6 +1,5 @@
 from injector import inject, singleton
-from llama_index import MockEmbedding, ServiceContext
-import llama_index
+from llama_index import MockEmbedding
 from llama_index.embeddings.base import BaseEmbedding
 
 from private_gpt.paths import models_cache_path
@@ -25,7 +24,6 @@ class EmbeddingComponent:
                 from langchain.embeddings import OllamaEmbeddings
 
                 self.embedding_model = OllamaEmbeddings(
-                    base_url="http://localhost:11434",
                     model=settings.ollama.embedding_model_name,
                 )
             case "sagemaker":
