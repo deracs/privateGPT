@@ -1,8 +1,10 @@
 """FastAPI app creation, logger configuration and main API routes."""
+import logging
 from typing import Any
 
 import llama_index
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
 from private_gpt.paths import docs_path
@@ -13,6 +15,8 @@ from private_gpt.server.embeddings.embeddings_router import embeddings_router
 from private_gpt.server.health.health_router import health_router
 from private_gpt.server.ingest.ingest_router import ingest_router
 from private_gpt.settings.settings import settings
+
+logger = logging.getLogger(__name__)
 
 # Add LlamaIndex simple observability
 llama_index.set_global_handler("simple")
@@ -101,8 +105,20 @@ app.include_router(ingest_router)
 app.include_router(embeddings_router)
 app.include_router(health_router)
 
+if settings.server.cors.enabled:
+    logger.debug("Setting up CORS middleware")
+    app.add_middleware(
+        CORSMiddleware,
+        allow_credentials=settings.server.cors.allow_credentials,
+        allow_origins=settings.server.cors.allow_origins,
+        allow_origin_regex=settings.server.cors.allow_origin_regex,
+        allow_methods=settings.server.cors.allow_methods,
+        allow_headers=settings.server.cors.allow_headers,
+    )
+
 
 if settings.ui.enabled:
-    from private_gpt.ui.ui import mount_in_app
+    logger.debug("Importing the UI module")
+    from private_gpt.ui.ui import PrivateGptUi
 
-    mount_in_app(app)
+    PrivateGptUi().mount_in_app(app)
